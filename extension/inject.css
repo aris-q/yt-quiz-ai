@@ -1,0 +1,14 @@
+#yt-quiz-btn {
+    opacity: 0.9;
+    transition: opacity 0.15s;
+}
+
+#yt-quiz-btn:hover {
+    opacity: 1;
+}
+
+#yt-quiz-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: white;
+}

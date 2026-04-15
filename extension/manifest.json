@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "YT Quiz AI",
+  "version": "1.0",
+  "description": "Generate AI quizzes from YouTube videos",
+  "permissions": ["storage", "activeTab", "tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/watch*"],
+      "js": ["content.js"],
+      "css": ["inject.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

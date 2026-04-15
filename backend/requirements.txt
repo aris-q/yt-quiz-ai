@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+anthropic
+youtube-transcript-api
+pydantic
+google-generativeai
+supabase
