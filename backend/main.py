@@ -6,7 +6,10 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import google.generativeai as genai
 from supabase import create_client
 import json
-import creds
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -24,12 +27,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-genai.configure(api_key=creds.gemini)
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 supabase = create_client(
-    creds.supabaseA,
-    creds.supabaseB
+    os.getenv("SUPABASE_URL"),
+    os.getenv("SUPABASE_ANON_KEY")
 )
 
 class AttemptRequest(BaseModel):
