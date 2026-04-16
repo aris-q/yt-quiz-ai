@@ -3,13 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from pydantic import BaseModel
 from youtube_transcript_api import YouTubeTranscriptApi
-import google.generativeai as genai
+from google import genai
 from supabase import create_client
 import json
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
 
 app = FastAPI()
 
@@ -27,8 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-2.5-flash")
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 supabase = create_client(
     os.getenv("SUPABASE_URL"),
@@ -77,7 +76,13 @@ Respond ONLY with a JSON array, no markdown, no explanation. Format:
 ]
 answer is the index (0-3) of the correct option."""
 
-    response = model.generate_content(prompt)
+    try:
+        response = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
+    except Exception as e:
+        msg = str(e)
+        if "429" in msg or "RESOURCE_EXHAUSTED" in msg or "quota" in msg.lower():
+            raise HTTPException(status_code=429, detail=f"Gemini quota error: {msg}")
+        raise HTTPException(status_code=500, detail=f"AI error: {msg}")
     raw = response.text.strip()
 
     if raw.startswith("```"):

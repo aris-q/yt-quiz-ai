@@ -3,6 +3,6 @@ uvicorn
 anthropic
 youtube-transcript-api
 pydantic
-google-generativeai
+google-genai
 supabase
 python-dotenv

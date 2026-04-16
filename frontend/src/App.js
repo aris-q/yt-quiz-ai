@@ -25,12 +25,18 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ video_id: videoId, num_questions: 5 })
     })
-      .then(r => r.json())
-      .then(data => {
-        if (data.questions) { setQuestions(data.questions); setQuizLoading(false); }
-        else { setError(data.detail || 'Failed to load quiz.'); setQuizLoading(false); }
+      .then(async r => {
+        const data = await r.json();
+        if (!r.ok) {
+          setError(data.detail || `Error ${r.status}. Please try again.`);
+        } else if (data.questions) {
+          setQuestions(data.questions);
+        } else {
+          setError(data.detail || 'Failed to load quiz.');
+        }
+        setQuizLoading(false);
       })
-      .catch(() => { setError('Could not connect to backend.'); setQuizLoading(false); });
+      .catch(() => { setError('Could not connect to backend. Make sure it is running on port 8000.'); setQuizLoading(false); });
   }, [isAuthenticated, videoId]);
 
   useEffect(() => {
