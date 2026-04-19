@@ -39,7 +39,7 @@ class AttemptRequest(BaseModel):
     score: int
     total: int
     user_email: str = None
-    
+
 class QuizRequest(BaseModel):
     video_id: str
     num_questions: int = 5

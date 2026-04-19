@@ -7,3 +7,5 @@ frontend/build/
 .DS_Store
 backend/.DS_Store
 backend/creds.py
+.gitignore
+README-INSTRUCTIONS.md
